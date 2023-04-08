@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 // Internal Imports
 const database = require("./util/database");
 const authRouter = require("./routes/auth");
+const userRouter = require("./routes/user");
 //Models Imports
 const User = require("./models/user");
 const Task = require("./models/task");
@@ -22,7 +23,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
 app.use("/auth", authRouter);
-// Database Relations
+app.use(userRouter);
 User.hasMany(Task, { foreignKey: { allowNull: false } });
 
 Task.belongsTo(User);

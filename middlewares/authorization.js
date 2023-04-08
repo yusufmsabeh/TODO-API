@@ -5,7 +5,7 @@ module.exports = async (request, response, next) => {
   try {
     const authHeader = request.headers["authorization"];
     if (!authHeader) {
-      return response.sendStatus(500);
+      return response.sendStatus(401);
     }
     const token = authHeader.split(" ")[1];
     if (!token) {
@@ -16,7 +16,7 @@ module.exports = async (request, response, next) => {
     request.user = user;
     next();
   } catch (error) {
-    console.log(error);
+    console.error(error);
     response.setStatus(500);
   }
 };
