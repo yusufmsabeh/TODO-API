@@ -16,7 +16,15 @@ module.exports = async (request, response, next) => {
     request.user = user;
     next();
   } catch (error) {
+    if (error.name == "TokenExpiredError") {
+      return response.status(401).json({
+        error: {
+          code: 401,
+          message: "Token Expired, Please login",
+        },
+      });
+    }
     console.error(error);
-    response.setStatus(500);
+    response.sendStatus(500);
   }
 };

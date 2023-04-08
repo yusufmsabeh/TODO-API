@@ -74,7 +74,10 @@ exports.postLogin = async (request, response, next) => {
       {
         userId: user.id,
       },
-      process.env.ACCESS_TOKEN_SECRET
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "30d",
+      }
     );
 
     response.status(200).json({
