@@ -10,6 +10,7 @@ const authRouter = require("./routes/auth");
 //Models Imports
 const User = require("./models/user");
 const Task = require("./models/task");
+const { DataTypes } = require("sequelize");
 dotenv.config();
 const app = express();
 const upload = multer();
@@ -22,10 +23,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
 app.use("/auth", authRouter);
 // Database Relations
-User.hasMany(Task);
-Task.belongsTo(User, {
-  constrains: true,
-});
+User.hasMany(Task, { foreignKey: { allowNull: false } });
+
+Task.belongsTo(User);
 database
   .sync()
   .then((result) => {
