@@ -70,3 +70,17 @@ exports.deleteTask = async (request, response, next) => {
     response.sendStatus(500);
   }
 };
+
+exports.getTasksCount = async (request, response, next) => {
+  try {
+    const user = request.user;
+    const tasksCount = await user.countTasks();
+    response.status(200).json({
+      code: 200,
+      TasksCount: tasksCount,
+    });
+  } catch (error) {
+    console.error(error);
+    response.sendStatus(500);
+  }
+};
