@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Task = require("../models/task");
 const crypto = require("crypto");
+const { Op } = require("sequelize");
 exports.getTasks = async (request, response, next) => {
   try {
     const user = request.user;
@@ -15,7 +16,6 @@ exports.getTasks = async (request, response, next) => {
 exports.postTasks = async (request, response, next) => {
   try {
     const { title, description } = request.body;
-    console.log(title, description);
     if (!(title && description)) {
       return response.status(400).json({
         error: {
@@ -41,7 +41,6 @@ exports.postTasks = async (request, response, next) => {
 exports.deleteTask = async (request, response, next) => {
   try {
     const taskId = request.query.taskId;
-    console.log(taskId);
     if (!taskId) {
       return response.status(400).json({
         error: {
@@ -78,6 +77,36 @@ exports.getTasksCount = async (request, response, next) => {
     response.status(200).json({
       code: 200,
       TasksCount: tasksCount,
+    });
+  } catch (error) {
+    console.error(error);
+    response.sendStatus(500);
+  }
+};
+
+exports.getSearch = async (request, response, next) => {
+  try {
+    const searchQuery = request.query.q;
+    const user = request.user;
+    if (!searchQuery) {
+      return response.status(400).json({
+        error: {
+          code: 400,
+          message: "Search Query required",
+        },
+      });
+    }
+    const tasks = await Task.findAll({
+      where: {
+        [Op.and]: [
+          { userId: user.id },
+          { title: { [Op.like]: `%${searchQuery}%` } },
+        ],
+      },
+    });
+    response.status(200).json({
+      code: 200,
+      tasks: tasks,
     });
   } catch (error) {
     console.error(error);

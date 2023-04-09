@@ -3,7 +3,7 @@ exports.getKeepAlive = async (request, response, next) => {
     response.status(200).send("I am A live");
     console.log("I am A live");
   } catch (error) {
-    console.log(error);
+    console.error(error);
     response.sendStatus(500);
   }
 };

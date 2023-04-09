@@ -31,7 +31,6 @@ exports.postSignup = async (request, response, next) => {
     });
     response.sendStatus(200);
   } catch (error) {
-    console.log(error.parent.errno == 19);
     if (error.parent.errno == 19)
       return response.status(400).json({
         error: {
@@ -90,7 +89,7 @@ exports.postLogin = async (request, response, next) => {
       token: token,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     response.sendStatus(500);
   }
 };
