@@ -13,6 +13,9 @@ module.exports = async (request, response, next) => {
     }
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     const user = await User.findByPk(decodedToken.userId);
+    if (!user) {
+      return response.sendStatus(401);
+    }
     request.user = user;
     next();
   } catch (error) {
