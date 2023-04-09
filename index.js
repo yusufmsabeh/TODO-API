@@ -8,6 +8,7 @@ const dotenv = require("dotenv");
 const database = require("./util/database");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
+const keepAliveRouter = require("./routes/keep_alive");
 //Models Imports
 const User = require("./models/user");
 const Task = require("./models/task");
@@ -19,6 +20,7 @@ app.use((request, response, next) => {
   console.log("request");
   next();
 });
+app.use(keepAliveRouter);
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
