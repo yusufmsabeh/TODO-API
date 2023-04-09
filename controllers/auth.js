@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 exports.postSignup = async (request, response, next) => {
   try {
     const { name, email, password, confirmPassword } = request.body;
-    console.log(name, email, password, confirmPassword);
     if (!(name && email && password && confirmPassword)) {
       return response.status(400).json({
         error: {
@@ -15,7 +14,12 @@ exports.postSignup = async (request, response, next) => {
       });
     }
     if (password != confirmPassword) {
-      return response.status(400).send("Password does not match");
+      return response.status(400).json({
+        error: {
+          code: 400,
+          message: "Password does not match!",
+        },
+      });
     }
     const hashedPassword = await bcrypt.hash(password, 12);
     const id = crypto.randomUUID();
