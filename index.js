@@ -16,11 +16,11 @@ const { DataTypes } = require("sequelize");
 dotenv.config();
 const app = express();
 const upload = multer();
+app.use(keepAliveRouter);
 app.use((request, response, next) => {
   console.log("request");
   next();
 });
-app.use(keepAliveRouter);
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
