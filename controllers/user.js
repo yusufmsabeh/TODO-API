@@ -144,3 +144,42 @@ exports.postDoneTask = async (request, response, next) => {
     response.sendStatus(500);
   }
 };
+
+exports.putUpdateTask = async (request, response, next) => {
+  try {
+    const taskId = request.query.taskId;
+    if (!taskId)
+      return response.status(400).json({
+        error: {
+          code: 400,
+          message: "taskId required",
+        },
+      });
+
+    const { title, description } = request.body;
+    if (!(title && description))
+      return response.status(400).json({
+        error: {
+          code: 400,
+          message: "Missing parameters",
+        },
+      });
+    const effectedRows = await Task.update(
+      { title: title, description: description },
+      { where: { id: taskId } }
+    );
+    if (effectedRows == 0) {
+      return response.status(400).json({
+        code: 400,
+        message: "there is no task with this id",
+      });
+    }
+    response.status(200).json({
+      code: 200,
+      message: `Task update successfully`,
+    });
+  } catch (error) {
+    console.error(error);
+    response.sendStatus(500);
+  }
+};

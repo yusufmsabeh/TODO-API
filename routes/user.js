@@ -6,6 +6,7 @@ Router.use(authorizationMiddleware);
 Router.get("/task", userController.getTasks);
 Router.get("/tasks-count", userController.getTasksCount);
 Router.post("/task-status", userController.postDoneTask);
+Router.put("/update-task", userController.putUpdateTask);
 Router.post("/task", userController.postTasks);
 Router.get("/tasks-search", userController.getSearch);
 Router.delete("/delete-task", userController.deleteTask);
