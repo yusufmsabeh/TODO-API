@@ -15,6 +15,11 @@ const Task = sequelize.define("Task", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  is_done:{
+    type:DataTypes.BOOLEAN,
+    allowNull:false,
+    defaultValue:false
+  }
 });
 
 module.exports = Task;

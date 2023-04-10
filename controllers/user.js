@@ -113,3 +113,34 @@ exports.getSearch = async (request, response, next) => {
     response.sendStatus(500);
   }
 };
+
+exports.postDoneTask = async (request, response, next) => {
+  try {
+    const taskId = request.query.taskId;
+    if (!taskId) {
+      return response.status(400).json({
+        error: {
+          code: 400,
+          message: "taskId required",
+        },
+      });
+    }
+
+    const task = await Task.findByPk(taskId);
+    if (!task) {
+      return response.status(400).json({
+        code: 400,
+        message: "there is no task with this id",
+      });
+    }
+    task.is_done = !task.is_done;
+    await task.save();
+    response.status(200).json({
+      code: 200,
+      message: `Task Status Changed to ${task.is_done}`,
+    });
+  } catch (error) {
+    console.error(error);
+    response.sendStatus(500);
+  }
+};
