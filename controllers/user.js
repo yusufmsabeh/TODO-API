@@ -53,6 +53,7 @@ exports.deleteTask = async (request, response, next) => {
     const effectedRows = await Task.destroy({
       where: {
         id: taskId,
+        userId: request.user.id,
       },
     });
     if (effectedRows == 0) {
@@ -172,7 +173,7 @@ exports.putUpdateTask = async (request, response, next) => {
       });
     const effectedRows = await Task.update(
       { title: title, description: description },
-      { where: { id: taskId } }
+      { where: { id: taskId, userId: request.user.id } }
     );
     if (effectedRows == 0) {
       return response.status(400).json({
