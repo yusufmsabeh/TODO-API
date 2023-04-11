@@ -21,7 +21,7 @@ exports.postSignup = async (request, response, next) => {
         },
       });
     }
-    const user = User.findOne({
+    const user = await User.findOne({
       where: {
         email: email,
       },
@@ -34,7 +34,7 @@ exports.postSignup = async (request, response, next) => {
         },
       });
     }
-    const hashedPassword = await bcrypt.hash(password, 1);
+    const hashedPassword = await bcrypt.hash(password, 12);
     const id = crypto.randomUUID();
     await User.create({
       id: id,
