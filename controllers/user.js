@@ -6,7 +6,10 @@ exports.getTasks = async (request, response, next) => {
   try {
     const user = request.user;
     if (request.query.q) return next();
-    const tasks = await user.getTasks();
+
+    const tasks = await user.getTasks({
+      attributes: ["title", "description", "is_done"],
+    });
     response.status(200).json({ code: 200, tasks: tasks });
   } catch (error) {
     console.error(error);
@@ -32,7 +35,10 @@ exports.postTasks = async (request, response, next) => {
       title: title,
       description: description,
     });
-    response.sendStatus(200);
+    response.status(200).json({
+      code: 200,
+      message: "Task created successfully",
+    });
   } catch (error) {
     console.error(error);
     response.sendStatus(500);
@@ -98,12 +104,10 @@ exports.getSearch = async (request, response, next) => {
         },
       });
     }
-    const tasks = await Task.findAll({
+    const tasks = await user.getTasks({
+      attributes: ["title", "description", "is_done"],
       where: {
-        [Op.and]: [
-          { userId: user.id },
-          { title: { [Op.like]: `%${searchQuery}%` } },
-        ],
+        title: { [Op.like]: `%${searchQuery}%` },
       },
     });
     response.status(200).json({

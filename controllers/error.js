@@ -5,8 +5,10 @@ exports.handleErrors = async (request, response, next) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
-        code: 422,
-        errors: errors.array(),
+        error: {
+          code: 422,
+          message: errors.array()[0].msg,
+        },
       });
     }
     next();

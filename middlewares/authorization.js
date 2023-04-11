@@ -26,8 +26,15 @@ module.exports = async (request, response, next) => {
           message: "Token Expired, Please login",
         },
       });
+    } else {
+      return response.status(401).json({
+        error: {
+          code: 401,
+          message: "Something went wrong, Please login ",
+        },
+      });
+      console.error(error);
+      response.sendStatus(500);
     }
-    console.error(error);
-    response.sendStatus(500);
   }
 };
