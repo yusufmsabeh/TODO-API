@@ -21,7 +21,20 @@ exports.postSignup = async (request, response, next) => {
         },
       });
     }
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = User.findOne({
+      where: {
+        email: email,
+      },
+    });
+    if (user) {
+      return response.status(400).json({
+        error: {
+          code: 400,
+          message: "Email Exists",
+        },
+      });
+    }
+    const hashedPassword = await bcrypt.hash(password, 1);
     const id = crypto.randomUUID();
     await User.create({
       id: id,
