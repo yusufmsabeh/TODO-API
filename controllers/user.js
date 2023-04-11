@@ -117,6 +117,7 @@ exports.getSearch = async (request, response, next) => {
 
 exports.postDoneTask = async (request, response, next) => {
   try {
+    const user = request.user;
     const taskId = request.query.taskId;
     if (!taskId) {
       return response.status(400).json({
@@ -127,7 +128,11 @@ exports.postDoneTask = async (request, response, next) => {
       });
     }
 
-    const task = await Task.findByPk(taskId);
+    const task = await Task.findOne({
+      where: {
+        [Op.and]: [{ id: taskId }, { userId: user.id }],
+      },
+    });
     if (!task) {
       return response.status(400).json({
         code: 400,
