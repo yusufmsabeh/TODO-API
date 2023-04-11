@@ -5,6 +5,7 @@ const { Op } = require("sequelize");
 exports.getTasks = async (request, response, next) => {
   try {
     const user = request.user;
+    if (request.query.q) return next();
     const tasks = await user.getTasks();
     response.status(200).json({ code: 200, tasks: tasks });
   } catch (error) {

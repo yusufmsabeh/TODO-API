@@ -29,7 +29,10 @@ exports.postSignup = async (request, response, next) => {
       email: email,
       password: hashedPassword,
     });
-    response.sendStatus(200);
+    response.status(200).json({
+      code: "200",
+      message: "Account created successfully",
+    });
   } catch (error) {
     if (error.parent.errno == 19)
       return response.status(400).json({
@@ -77,16 +80,16 @@ exports.postLogin = async (request, response, next) => {
       {
         userId: user.id,
       },
-      process.env['ACCESS_TOKEN_SECRET'],
+      process.env["ACCESS_TOKEN_SECRET"],
       {
         expiresIn: "30d",
       }
     );
 
     response.status(200).json({
-      name: user.name,
-      email: user.email,
-      token: token,
+      code: 200,
+      message: "Logged in successfully",
+      user: { name: user.name, email: user.email, token: token },
     });
   } catch (error) {
     console.error(error);
