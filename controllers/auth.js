@@ -13,27 +13,7 @@ exports.postSignup = async (request, response, next) => {
         },
       });
     }
-    if (password != confirmPassword) {
-      return response.status(400).json({
-        error: {
-          code: 400,
-          message: "Password does not match!",
-        },
-      });
-    }
-    const user = await User.findOne({
-      where: {
-        email: email,
-      },
-    });
-    if (user) {
-      return response.status(400).json({
-        error: {
-          code: 400,
-          message: "Email Exists",
-        },
-      });
-    }
+
     const hashedPassword = await bcrypt.hash(password, 12);
     const id = crypto.randomUUID();
     await User.create({
@@ -47,13 +27,7 @@ exports.postSignup = async (request, response, next) => {
       message: "Account created successfully",
     });
   } catch (error) {
-    if (error.parent.errno == 19)
-      return response.status(400).json({
-        error: {
-          code: 400,
-          message: "Email Exists",
-        },
-      });
+    console.log(error);
     response.sendStatus(500);
   }
 };
