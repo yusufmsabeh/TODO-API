@@ -12,6 +12,9 @@ Router.use(
       .normalizeEmail()
       .isEmail()
       .withMessage("Enter A valid Email please "),
+    body("password")
+      .isLength({ min: 8 })
+      .withMessage("Password cannot be less then 8"),
   ],
   errorController.handleErrors
 );
