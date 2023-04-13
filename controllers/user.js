@@ -8,7 +8,7 @@ exports.getTasks = async (request, response, next) => {
     if (request.query.q) return next();
 
     const tasks = await user.getTasks({
-      attributes: ["title", "description", "is_done"],
+      attributes: ["id", "title", "description", "is_done"],
     });
     response.status(200).json({ code: 200, tasks: tasks });
   } catch (error) {
@@ -105,7 +105,7 @@ exports.getSearch = async (request, response, next) => {
       });
     }
     const tasks = await user.getTasks({
-      attributes: ["title", "description", "is_done"],
+      attributes: ["id", "title", "description", "is_done"],
       where: {
         title: { [Op.like]: `%${searchQuery}%` },
       },
