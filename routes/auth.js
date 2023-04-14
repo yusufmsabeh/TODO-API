@@ -10,10 +10,14 @@ Router.use(
   [
     sanitizeBody("*").trim(),
     body("email")
+      .notEmpty()
+      .withMessage("E-mail required")
       .normalizeEmail()
       .isEmail()
       .withMessage("Enter A valid Email please "),
     body("password")
+      .notEmpty()
+      .withMessage("Password required")
       .isLength({ min: 8 })
       .withMessage("Password cannot be less then 8"),
   ],
@@ -22,6 +26,10 @@ Router.use(
 Router.post(
   "/signup",
   [
+    body(["confirmPassword"])
+      .notEmpty()
+      .withMessage("Confirm Password is required"),
+    body("name").notEmpty().withMessage("Name required"),
     body("password").custom((value, { req }) => {
       if (value != req.body.confirmPassword)
         throw new Error("Password does not match");

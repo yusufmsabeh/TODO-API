@@ -5,15 +5,6 @@ const jwt = require("jsonwebtoken");
 exports.postSignup = async (request, response, next) => {
   try {
     const { name, email, password, confirmPassword } = request.body;
-    if (!(name && email && password && confirmPassword)) {
-      return response.status(400).json({
-        error: {
-          code: 400,
-          message: "All fields required",
-        },
-      });
-    }
-
     const hashedPassword = await bcrypt.hash(password, 12);
     const id = crypto.randomUUID();
     await User.create({
@@ -35,14 +26,7 @@ exports.postSignup = async (request, response, next) => {
 exports.postLogin = async (request, response, next) => {
   try {
     const { email, password } = request.body;
-    if (!(email && password)) {
-      return response.status(400).json({
-        error: {
-          code: 400,
-          message: "All fields required",
-        },
-      });
-    }
+
     const user = await User.findOne({ where: { email: email } });
 
     if (!user) {
