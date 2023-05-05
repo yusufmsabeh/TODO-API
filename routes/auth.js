@@ -31,8 +31,10 @@ Router.post(
       .withMessage("Confirm Password is required"),
     body("name").notEmpty().withMessage("Name required"),
     body("password").custom((value, { req }) => {
-      if (value != req.body.confirmPassword)
+      if (value != req.body.confirmPassword) {
         throw new Error("Password does not match");
+      }
+      return true;
     }),
     body("email").custom((value) => {
       return User.findOne({ where: { email: value } }).then((user) => {
